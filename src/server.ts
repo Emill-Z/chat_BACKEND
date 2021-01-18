@@ -1,22 +1,54 @@
-import Koa from 'koa';
-import router from './routes/routes';
+import express, { Application } from 'express';
 import chalk from 'chalk';
-import middleware from './middleware/middleware';
+import http from 'http';
+import socket from 'socket.io';
+import { RoutesBuilder } from './routes/routes';
+import helmet from 'helmet';
+import cors from 'cors';
 
-const app = new Koa();
+export class Server {
 
-app.use(middleware());
+  public readonly PORT: number = 3000;
 
-app.on('error', (err: Error, ctx: Koa.Context) => {
-    console.log(chalk.blue('status code: '), chalk.yellow(ctx.status.toString()));
-    console.log(chalk.red('error message:'), chalk.red(err.message));
-});
+  private _app: Application;
+  private _server: http.Server;
+  private _io: socket.Server;
 
-app.use(async (ctx: Koa.Context, next: Koa.Next) => {
-    console.log('URL: ', ctx.url);
-    await next();
-});
+  constructor() {
+    this._appInit();
+    this._initServer();
+    this._initSocket();
+    this._initAppRoutes();
+    this._listen();
+  }
 
-app.use(router.routes());
+  public getApp(): express.Application {
+    return this._app;
+  }
 
-app.listen(3000, () => console.log(chalk.blue('Server running on port'), chalk.white('http://localhost:3000')));
+  private _appInit(): void {
+    this._app = express();
+    this._app.use(helmet());
+    this._app.use(cors());
+  }
+
+  private _initServer(): void {
+    this._server = http.createServer(this._app);
+  }
+
+  private _initAppRoutes(): void {
+    new RoutesBuilder(this._app);
+  }
+
+  private _initSocket(): void {
+    this._io = new socket.Server(this._server);
+    this._app.set('io', this._io);
+  }
+
+  private _listen(): void {
+    this._server.listen(this.PORT, () => {
+      console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this.PORT}`));
+    });
+  }
+
+}
