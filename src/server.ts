@@ -5,6 +5,7 @@ import socket from 'socket.io';
 import { RoutesBuilder } from './routes/routes';
 import helmet from 'helmet';
 import cors from 'cors';
+import { GraphqlService } from './graphql/Graphql.service';
 
 export class Server {
 
@@ -18,6 +19,7 @@ export class Server {
     this._appInit();
     this._initServer();
     this._initSocket();
+    this._initQqraphql();
     this._initAppRoutes();
     this._listen();
   }
@@ -43,6 +45,10 @@ export class Server {
   private _initSocket(): void {
     this._io = new socket.Server(this._server);
     this._app.set('io', this._io);
+  }
+
+  private _initQqraphql(): void {
+    GraphqlService.init(this._app);
   }
 
   private _listen(): void {

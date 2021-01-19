@@ -13,7 +13,9 @@ export class RoutesBuilder {
   private _createRoutes(): void {
     const userCtrl = new UserCtrl();
 
-    this._app.get('/', userCtrl.test);
+    this._app.get('/', (req, res) => {
+      res.status(200).send({ ok: 1 });
+    });
 
     this._app.get('/me', userCtrl.test);
   }
