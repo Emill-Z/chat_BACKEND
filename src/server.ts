@@ -2,9 +2,8 @@ import express, { Application } from 'express';
 import chalk from 'chalk';
 import http from 'http';
 import socket from 'socket.io';
-import { RoutesBuilder } from './routes/routes';
-import helmet from 'helmet';
-import cors from 'cors';
+import { RoutesMiddleware } from './routes';
+
 import { GraphqlService } from './graphql/Graphql.service';
 
 export class Server {
@@ -30,8 +29,6 @@ export class Server {
 
   private _appInit(): void {
     this._app = express();
-    this._app.use(helmet());
-    this._app.use(cors());
   }
 
   private _initServer(): void {
@@ -39,7 +36,7 @@ export class Server {
   }
 
   private _initAppRoutes(): void {
-    new RoutesBuilder(this._app);
+    new RoutesMiddleware(this._app);
   }
 
   private _initSocket(): void {

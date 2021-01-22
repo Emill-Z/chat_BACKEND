@@ -1,22 +1,25 @@
-import { Application, } from 'express';
-import { UserCtrl } from '../controllers';
+import express, { Router } from 'express';
+import userRoutes from './User.route';
 
-export class RoutesBuilder {
+class Routes {
 
-  private _app: Application;
+  private _router: Router = express.Router();
 
-  constructor(app: Application) {
-    this._app = app;
-    this._createRoutes();
+  constructor() {
+    this.init();
   }
 
-  private _createRoutes(): void {
-    const userCtrl = new UserCtrl();
+  get router(): Router {
+    return this._router;
+  }
 
-    this._app.get('/', (req, res) => {
-      res.status(200).send({ ok: 1 });
-    });
+  private init(): void {
+    this._router.get('/', (req, res) => { res.status(200).send({ ok: 1 }); });
 
-    this._app.get('/me', userCtrl.test);
+    this._router.use('/', userRoutes);
   }
 }
+
+const routes = new Routes();
+
+export default routes.router;
