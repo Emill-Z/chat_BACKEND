@@ -1,29 +1,24 @@
-import express, { Router } from 'express';
+import { RoutesBase } from '../common/models/RoutesBase';
 
-class UserRoutes {
-
-  private _router: Router = express.Router();
+class UserRoutes extends RoutesBase {
 
   constructor() {
-    this.init();
+    super();
   }
 
-  get router(): Router {
-    return this._router;
-  }
+  init(): void {
+    this.router
+      .get('/user', (req, resp) => {
+        resp
+          .status(200)
+          .send('/user');
+      })
 
-  private init(): void {
-    this._router.get('/user', (req, resp) => {
-      resp
-        .status(200)
-        .send('/user');
-    });
-
-    this._router.get('/user/:id', (req, resp) => {
-      resp
-        .status(200)
-        .send({ id: req.params.id });
-    });
+      .get('/user/:id', (req, resp) => {
+        resp
+          .status(200)
+          .send({ id: req.params.id });
+      });
   }
 
 }

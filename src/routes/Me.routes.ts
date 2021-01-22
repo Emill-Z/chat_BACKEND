@@ -1,22 +1,16 @@
-import express, { Router } from 'express';
+import { RoutesBase } from '../common/models/RoutesBase';
 import { UserCtrl } from '../controllers';
 
-class MeRoutes {
-
-  private _router: Router = express.Router();
+class MeRoutes extends RoutesBase {
 
   constructor() {
-    this.init();
+    super();
   }
 
-  get router(): Router {
-    return this._router;
-  }
-
-  private init(): void {
+  init(): void {
     const userCtrl = new UserCtrl();
 
-    this._router.get('/me', userCtrl.test);
+    this.router.get('/me', userCtrl.test);
   }
 
 }

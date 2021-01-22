@@ -6,6 +6,11 @@ import bodyparser from 'body-parser';
 import userRoutes from './User.routes';
 import meRoutes from './Me.routes';
 
+const ROUTE_LIST = [
+  userRoutes,
+  meRoutes,
+];
+
 export class RoutesMiddleware {
 
   private _app: Application;
@@ -20,12 +25,7 @@ export class RoutesMiddleware {
     this._app.use(cors());
     this._app.use(bodyparser.json());
 
-    const routes = [
-      userRoutes,
-      meRoutes,
-    ];
-
-    this._app.use('/api', routes);
+    this._app.use('/api', ROUTE_LIST);
   }
 
 }
