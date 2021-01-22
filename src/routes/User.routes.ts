@@ -1,7 +1,6 @@
 import express, { Router } from 'express';
-import { UserCtrl } from '../controllers';
 
-class UserRoute {
+class UserRoutes {
 
   private _router: Router = express.Router();
 
@@ -14,10 +13,6 @@ class UserRoute {
   }
 
   private init(): void {
-    const userCtrl = new UserCtrl();
-
-    this._router.get('/me', userCtrl.test);
-
     this._router.get('/user', (req, resp) => {
       resp
         .status(200)
@@ -33,6 +28,4 @@ class UserRoute {
 
 }
 
-const userRoutes = new UserRoute();
-
-export default userRoutes.router;
+export default (new UserRoutes()).router;
