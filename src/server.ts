@@ -2,9 +2,8 @@ import express, { Application } from 'express';
 import chalk from 'chalk';
 import http from 'http';
 import socket from 'socket.io';
-import { RoutesMiddleware } from './routes';
-
-import { GraphqlService } from './graphql/Graphql.service';
+import RoutesMiddleware from './routes';
+import GraphqlInit from './graphql';
 
 export class Server {
 
@@ -15,40 +14,32 @@ export class Server {
   private _io: socket.Server;
 
   constructor() {
-    this._appInit();
-    this._initServer();
-    this._initSocket();
-    this._initQqraphql();
-    this._initAppRoutes();
-    this._listen();
+    this.init();
+    GraphqlInit(this._app);
+    RoutesMiddleware(this._app);
+    this.listen();
   }
 
   public getApp(): express.Application {
     return this._app;
   }
 
-  private _appInit(): void {
+  private init(): void {
     this._app = express();
+    this.initServer();
+    this.initSocket();
   }
 
-  private _initServer(): void {
+  private initServer(): void {
     this._server = http.createServer(this._app);
   }
 
-  private _initAppRoutes(): void {
-    new RoutesMiddleware(this._app);
-  }
-
-  private _initSocket(): void {
+  private initSocket(): void {
     this._io = new socket.Server(this._server);
     this._app.set('io', this._io);
   }
 
-  private _initQqraphql(): void {
-    GraphqlService.init(this._app);
-  }
-
-  private _listen(): void {
+  private listen(): void {
     this._server.listen(this.PORT, () => {
       console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this.PORT}`));
     });

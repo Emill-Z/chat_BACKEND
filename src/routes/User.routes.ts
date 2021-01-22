@@ -1,4 +1,4 @@
-import { RoutesBase } from '../common/models/RoutesBase';
+import { RoutesBase } from '../common/services/RoutesBase';
 
 class UserRoutes extends RoutesBase {
 
