@@ -1,59 +1,36 @@
 import { Request, Response } from 'express';
+import { ICreateUserInput, UserI } from '../common/interfaces/User';
+import DB from '../db';
 
-const rooms = [
-  {
-    id: 1,
-    name: 'Echo Bot',
-    isBot: false,
-    active: true,
-    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW7PxrFc8r3fF9M21nLMOstwmXcTIBoA_tSQ&usqp=CAU',
-    lastMessage: 'Lorem ibp ipsum ibo ammet i tak dalee i tomu podobnoe i na to oxhen pohozhe!',
-  },
-  {
-    id: 2,
-    name: 'Reverse Bot',
-    isBot: true,
-    active: true,
-    avatar: 'https://st4.depositphotos.com/20923550/26731/v/950/depositphotos_267317470-stock-illustration-arrow-back-reverse-rewind-blue.jpg',
-    lastMessage: 'Lorem dcdcdcdcibp ipsum ibo ammet i tak dalee i tomu podobnoe i na to oxhen pohozhe!',
-  },
-  {
-    id: 3,
-    name: '#spam',
-    isBot: true,
-    active: true,
-    avatar: 'https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg',
-    lastMessage: 'Lorem ibp idcdcdcpsum ibo ammet i tak dalee i tomu podobnoe i na to oxhen pohozhe!',
-  },
-  {
-    id: 4,
-    name: 'Ignore bot',
-    isBot: true,
-    active: false,
-    avatar: 'https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg',
-    lastMessage: 'Lorem ibp idcdcdcpsum ibo ammet i tak dalee i tomu podobnoe i na to oxhen pohozhe!',
-  },
-];
+class UserController {
 
-interface MeI {
-  id: number;
-  name: string;
-  rooms: number[];
-  avatar: string;
-}
+  public signUp(newUser: ICreateUserInput): UserI {
+    const fakeDatabase: UserI[] = DB.users;
 
-const me: MeI = {
-  id: 1,
-  name: 'Mock',
-  rooms: [],
-  avatar: null,
-};
+    const { id, name, email } = newUser.input;
 
-export default class UserController {
+    fakeDatabase.push({ id, name, email });
+
+    return fakeDatabase.find((u) => u.id === id);
+  }
+
+  public signIn(newUser: ICreateUserInput): UserI {
+    const fakeDatabase: UserI[] = DB.users;
+    const { id } = newUser.input;
+    return fakeDatabase.find((u) => u.id === id);
+  }
 
   public async test(req: Request, res: Response): Promise<void> {
     try {
-      const _rooms = rooms.map((r) => ({
+      const me: UserI = {
+        id: 1,
+        name: 'Mock',
+        email: 'emailname@gmail.com',
+        rooms: [],
+        avatar: null,
+      };
+
+      const _rooms = DB.rooms.map((r) => ({
         id: r.id,
         name: r.name,
         active: r.active,
@@ -78,3 +55,5 @@ export default class UserController {
   }
 
 }
+
+export const userCtrl =  new UserController();

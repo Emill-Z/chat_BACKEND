@@ -1,5 +1,5 @@
 import { RoutesBase } from '../common/services/RoutesBase';
-import { UserCtrl } from '../controllers';
+import { userCtrl } from '../controllers/UserController';
 
 class MeRoutes extends RoutesBase {
 
@@ -8,8 +8,6 @@ class MeRoutes extends RoutesBase {
   }
 
   init(): void {
-    const userCtrl = new UserCtrl();
-
     this.router.get('/me', userCtrl.test);
   }
 

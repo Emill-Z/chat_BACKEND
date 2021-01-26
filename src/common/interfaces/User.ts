@@ -1,12 +1,12 @@
-export interface IAuthUser {
+export interface UserI {
   id: number;
-  name: number;
+  name: string;
+  email: string;
+  rooms?: number[];
+  avatar?: string;
 }
 
-export interface ICreateUser {
-  firstname: string;
-  lastname: string
-  email: string;
+export interface ICreateUser extends UserI {
   password: string;
 }
 

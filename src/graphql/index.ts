@@ -6,7 +6,7 @@ import { userSchema } from './schema';
 export default function (app: Application): void {
   const config = {
     schema: userSchema,
-    rootValue: new Resolvers(),
+    rootValue: { ...new Resolvers() },
     graphiql: true,
   };
   app.use('/graphql', graphqlHTTP(config));

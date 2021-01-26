@@ -11,6 +11,10 @@ const ROUTES_LIST = [
 ];
 
 export default function (app: Application): void {
+  app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+  });
   app.use(helmet());
   app.use(cors());
   app.use(bodyparser.json());
