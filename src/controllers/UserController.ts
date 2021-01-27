@@ -1,57 +1,48 @@
-import { Request, Response } from 'express';
-import { ICreateUserInput, UserI } from '../common/interfaces/User';
+import { ICreateUserInput, IUserInput, UserI } from '../common/interfaces/User';
 import DB from '../db';
 
 class UserController {
 
-  public signUp(newUser: ICreateUserInput): UserI {
-    const fakeDatabase: UserI[] = DB.users;
+  public signUp(req: ICreateUserInput): UserI {
+    const { name, email } = req.input;
 
-    const { id, name, email } = newUser.input;
+    // const id = Math.floor(Math.random() * Math.floor(10));
+    const id = 1;
 
-    fakeDatabase.push({ id, name, email });
+    const newUser = { id, name, email };
 
-    return fakeDatabase.find((u) => u.id === id);
+    DB.users.push(newUser);
+
+    console.log('newUser: ', newUser);
+
+    return DB.users.find((u) => u.id === id);
   }
 
-  public signIn(newUser: ICreateUserInput): UserI {
+  public signIn(newUser: IUserInput): UserI {
     const fakeDatabase: UserI[] = DB.users;
     const { id } = newUser.input;
     return fakeDatabase.find((u) => u.id === id);
   }
 
-  public async test(req: Request, res: Response): Promise<void> {
-    try {
-      const me: UserI = {
-        id: 1,
-        name: 'Mock',
-        email: 'emailname@gmail.com',
-        rooms: [],
-        avatar: null,
-      };
+  public getUser(id: number): UserI {
+    const user: UserI = DB.users.find((u) => u.id == id);
 
-      const _rooms = DB.rooms.map((r) => ({
-        id: r.id,
-        name: r.name,
-        active: r.active,
-        avatar: r.avatar,
-        lastMessage: r.lastMessage,
-      }));
-
-      const resp = {
-        id: me.id,
-        name: me.name,
-        rooms: _rooms,
-        avatar: me.avatar,
-      };
-
-      res
-        .status(200)
-        .send(resp);
-
-    } catch(e) {
-      res.status(400).send({ message: e });
+    if (!user) {
+      return null;
     }
+
+    const _rooms = DB.rooms.map((r) => ({
+      id: r.id,
+      name: r.name,
+      active: r.active,
+      avatar: r.avatar,
+      isBot: r.isBot,
+      lastMessage: r.lastMessage,
+    }));
+
+    user.rooms = _rooms;
+
+    return user;
   }
 
 }

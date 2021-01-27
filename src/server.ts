@@ -5,17 +5,17 @@ import socket, { Socket } from 'socket.io';
 import RoutesMiddleware from './routes';
 import GraphqlInit from './graphql';
 
-interface NewRoomI {
-  userId: number;
-  chatId: number;
-  isBot: boolean;
-}
+// interface NewRoomI {
+//   userId: number;
+//   chatId: number;
+//   isBot: boolean;
+// }
 
-function onCreateRoom(data: NewRoomI): void {
-  console.log(data);
-    //   socket.join(`Room:${data.roomId}`);
-    //   this._io.to(`Room:${data.roomId}`).emit(JSON.stringify({ roomId: `Room:${data.roomId}` }));
-}
+// function onCreateRoom(data: NewRoomI): void {
+//   console.log(data);
+//     //   socket.join(`Room:${data.roomId}`);
+//     //   this._io.to(`Room:${data.roomId}`).emit(JSON.stringify({ roomId: `Room:${data.roomId}` }));
+// }
 export class Server {
 
   public readonly PORT: number = 3000;
@@ -37,7 +37,7 @@ export class Server {
     this._app = express();
     RoutesMiddleware(this._app);
     this.initServer();
-    this.initSocket();
+    // this.initSocket();
     GraphqlInit(this._app);
   }
 
@@ -45,18 +45,18 @@ export class Server {
     this._server = http.createServer(this._app);
   }
 
-  private initSocket(): void {
-    this._io = new socket.Server(this._server, { cors: { origin: '*' }});
+  // private initSocket(): void {
+  //   this._io = new socket.Server(this._server, { cors: { origin: '*' }});
 
-    this._io.on('connection', (socket: Socket) => {
-      console.log(socket.id);
+  //   this._io.on('connection', (socket: Socket) => {
+  //     console.log(socket.id);
 
-      socket
-        .on('createRoom', onCreateRoom);
-    });
+  //     socket
+  //       .on('createRoom', onCreateRoom);
+  //   });
 
-    this._app.set('io', this._io);
-  }
+  //   this._app.set('io', this._io);
+  // }
 
   private listen(): void {
     this._server.listen(this.PORT, () => {

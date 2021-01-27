@@ -1,5 +1,5 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLObjectType, GraphQLString } from 'graphql';
-import { ICreateUserInput } from '../common/interfaces/User';
+import { ICreateUserInput, IUserInput } from '../common/interfaces/User';
 import { userCtrl } from '../controllers/UserController';
 import { userType } from './query.types';
 
@@ -20,18 +20,14 @@ export const RootMutationType = new GraphQLObjectType({
       args: {
         input: { type: inputUserType }
       },
-      resolve: (_: unknown, user: ICreateUserInput) => {
-        return userCtrl.signUp(user);
-      }
+      resolve: (_: unknown, user: ICreateUserInput) => userCtrl.signUp(user),
     },
     signIn: {
       type: userType,
       args: {
         input: { type: inputUserType }
       },
-      resolve: (_: unknown, user: ICreateUserInput) => {
-        return userCtrl.signIn(user);
-      }
+      resolve: (_: unknown, user: IUserInput) => userCtrl.signIn(user)
     },
   }
 });

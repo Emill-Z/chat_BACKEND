@@ -1,18 +1,19 @@
 import { UserI } from '../common/interfaces/User';
-import DB from '../db';
+import { userCtrl } from '../controllers/UserController';
+
+interface ContextI {
+  test: string;
+}
+
+interface MeArgsI {
+  id: number;
+}
 
 export class Resolvers {
-  hello: () => string = () => 'HELLO';
 
-  me: () => UserI = () => ({
-    id: 1,
-    name: 'Email',
-    email: 'Email',
-  });
-  // me: (id: number) => UserI = (id: number) => {
-  //   console.log('RESOL');
-  //   console.log(id);
-  //   return DB.users.find(u =>  u.id === id);
-  // };
+  me: (a: MeArgsI, c: ContextI) => UserI = ({ id }, context) => {
+    console.log(context.test);
+    return userCtrl.getUser(id);
+  };
 
 }
