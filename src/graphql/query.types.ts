@@ -32,5 +32,7 @@ export const RootQueryType = new GraphQLObjectType({
         id: { type: GraphQLID },
       }
     },
+    users: { type: new GraphQLList(userType) },
+    rooms: { type: new GraphQLList(RoomType) },
   },
 });

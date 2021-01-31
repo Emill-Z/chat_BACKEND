@@ -3,6 +3,7 @@ export interface UserI {
   name: string;
   email: string;
   rooms?: unknown[];
+  subscriptions?: number[];
   avatar?: string;
 }
 

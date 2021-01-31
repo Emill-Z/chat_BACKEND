@@ -1,48 +1,61 @@
 import { ICreateUserInput, IUserInput, UserI } from '../common/interfaces/User';
-import DB from '../db';
+import { usersDB } from '../DB/users';
+import { roomsDB } from '../DB/rooms';
+
+interface RoomsI {
+  id: number|string;
+  name: string;
+}
 
 class UserController {
 
   public signUp(req: ICreateUserInput): UserI {
     const { name, email } = req.input;
 
-    // const id = Math.floor(Math.random() * Math.floor(10));
-    const id = 1;
+    const id = Math.floor(Math.random() * Math.floor(10));
 
-    const newUser = { id, name, email };
+    const newUser = { id, name, email, token: 'HBhjdbcsj4kbdcs53jbcjchcb31jh3veg' };
 
-    DB.users.push(newUser);
+    usersDB.push(newUser);
 
     console.log('newUser: ', newUser);
 
-    return DB.users.find((u) => u.id === id);
+    return usersDB.find((u) => u.id === id);
   }
 
   public signIn(newUser: IUserInput): UserI {
-    const fakeDatabase: UserI[] = DB.users;
+    const fakeDatabase: UserI[] = usersDB;
     const { id } = newUser.input;
     return fakeDatabase.find((u) => u.id === id);
   }
 
   public getUser(id: number): UserI {
-    const user: UserI = DB.users.find((u) => u.id == id);
+    const user: UserI = usersDB.find((u) => u.id == id);
 
     if (!user) {
       return null;
     }
 
-    const _rooms = DB.rooms.map((r) => ({
-      id: r.id,
-      name: r.name,
-      active: r.active,
-      avatar: r.avatar,
-      isBot: r.isBot,
-      lastMessage: r.lastMessage,
-    }));
+    // const _rooms = roomsDB.map((r) => ({
+    //   id: r.id,
+    //   name: r.name,
+    //   active: r.online,
+    //   avatar: r.avatar,
+    //   isBot: r.isBot,
+    //   lastMessage: r.lastMessage,
+    // }));
 
-    user.rooms = _rooms;
+    user.rooms = [];
 
     return user;
+  }
+
+  public getUsers(): UserI[] {
+    return usersDB;
+  }
+
+  public getRooms(): RoomsI[] {
+    return [...usersDB, ...roomsDB];
   }
 
 }

@@ -9,11 +9,28 @@ interface MeArgsI {
   id: number;
 }
 
+interface RoomI {
+  id: string|number;
+  name: string;
+}
+
+interface UserResolverI<T> {
+  (attrs: MeArgsI, c: ContextI): T;
+}
+
 export class Resolvers {
 
-  me: (a: MeArgsI, c: ContextI) => UserI = ({ id }, context) => {
+  me: UserResolverI<UserI> = ({ id }, context) => {
     console.log(context.test);
     return userCtrl.getUser(id);
   };
+
+  users: UserResolverI<UserI[]> = () => {
+    return userCtrl.getUsers();
+  }
+
+  rooms: UserResolverI<RoomI[]> = () => {
+    return userCtrl.getRooms();
+  }
 
 }
