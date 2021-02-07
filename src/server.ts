@@ -4,6 +4,7 @@ import http from 'http';
 import socket, { Socket } from 'socket.io';
 import RoutesMiddleware from './routes';
 import GraphqlInit from './graphql';
+import { PORT } from './env-list';
 
 // interface NewRoomI {
 //   userId: number;
@@ -16,9 +17,12 @@ import GraphqlInit from './graphql';
 //     //   socket.join(`Room:${data.roomId}`);
 //     //   this._io.to(`Room:${data.roomId}`).emit(JSON.stringify({ roomId: `Room:${data.roomId}` }));
 // }
-export class Server {
 
-  public readonly PORT: number = 3000;
+const g = 4;
+
+class Server {
+
+  private readonly _port: string = PORT;
 
   private _app: Application;
   private _server: http.Server;
@@ -59,9 +63,14 @@ export class Server {
   // }
 
   private listen(): void {
-    this._server.listen(this.PORT, () => {
-      console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this.PORT}`));
+    this._server.listen(this._port, () => {
+      console.log(g);
+      console.log(g);
+      console.log(g);
+      console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this._port}`));
     });
   }
 
 }
+
+export const app =  new Server().getApp();
