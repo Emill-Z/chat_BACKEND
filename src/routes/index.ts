@@ -14,8 +14,6 @@ export default function (app: Application): void {
   app.use((req, res, next) => {
     console.log('TEST');
     console.log(req.url);
-    console.log(req.url);
-    console.log(req.url);
     next();
   });
   app.use(helmet());

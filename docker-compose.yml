@@ -4,18 +4,17 @@ services:
   app:
     container_name: chat_node_app
     build:
-      context: ../
-      dockerfile: ./docker/${NODE_ENV}.Dockerfile
-    env_file: ../env/.dev
+      context: .
+      dockerfile: ./${NODE_ENV}.Dockerfile
+    env_file: ./env/.dev
     volumes:
-      - ./:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./src:/app/src
+    # depends_on:
+    #   - postgres
     ports:
       - '3000:3000'
 
 
-    # depends_on:
-    #   - postgres
 
 #   postgres:
 #     container_name: ChatPostgres

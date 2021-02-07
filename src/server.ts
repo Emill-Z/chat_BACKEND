@@ -64,9 +64,6 @@ class Server {
 
   private listen(): void {
     this._server.listen(this._port, () => {
-      console.log(g);
-      console.log(g);
-      console.log(g);
       console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this._port}`));
     });
   }
