@@ -9,24 +9,34 @@ services:
     env_file: ./env/.dev
     volumes:
       - ./src:/app/src
-    # depends_on:
-    #   - postgres
+    depends_on:
+      - postgres
     ports:
       - '3000:3000'
 
+  postgres:
+    container_name: ChatPostgres
+    image: postgres:10.4
+    restart: always
+    env_file: ./env/db.dev
+    volumes:
+      - postgresql_data:/app/postgresql/data
+    ports:
+      - '5432:5432'
 
+  # pgadmin:
+  #   container_name: pgadmin
+  #   # image: dpage/pgadmin4:4.30
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   env_file: ./env/db.dev
+  #   volumes:
+  #     - pgadmin-data:/app/pgadmin
+  #   depends_on:
+  #     - postgres
+  #   ports:
+  #     - "8080:80"
 
-#   postgres:
-#     container_name: ChatPostgres
-#     image: 10.3
-#     restart: always
-#     environment:
-#       - POSTGRES_USER=sammy
-#       - POSTGRES_PASSWORD=your_password
-#     volumes:
-#       - postgresql_data:/var/lib/postgresql/data
-#     ports:
-#       - '5432:5432'
-
-# volumes:
-#   postgresql_data:
+volumes:
+  postgresql_data:
+  pgadmin-data:

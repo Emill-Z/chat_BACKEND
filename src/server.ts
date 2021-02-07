@@ -6,6 +6,8 @@ import RoutesMiddleware from './routes';
 import GraphqlInit from './graphql';
 import { PORT } from './env-list';
 
+import { connection } from './DB';
+
 // interface NewRoomI {
 //   userId: number;
 //   chatId: number;
@@ -17,8 +19,6 @@ import { PORT } from './env-list';
 //     //   socket.join(`Room:${data.roomId}`);
 //     //   this._io.to(`Room:${data.roomId}`).emit(JSON.stringify({ roomId: `Room:${data.roomId}` }));
 // }
-
-const g = 4;
 
 class Server {
 
@@ -62,10 +62,16 @@ class Server {
   //   this._app.set('io', this._io);
   // }
 
-  private listen(): void {
-    this._server.listen(this._port, () => {
-      console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this._port}`));
-    });
+  private async listen(): Promise<void> {
+    try {
+      await connection;
+      this._server.listen(this._port, () => {
+        console.log(chalk.blue('⚡️[Postgres connected]'));
+        console.log(chalk.blue('⚡️[server]: Server is running at'), chalk.white(`https://localhost:${this._port}`));
+      });
+    } catch(e) {
+      console.log(e);
+    }
   }
 
 }
