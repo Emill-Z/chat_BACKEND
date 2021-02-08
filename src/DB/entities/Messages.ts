@@ -1,10 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntityColumns } from './BaseEntityColumns';
 
 @Entity()
 export class Messages extends BaseEntityColumns {
 
-  @PrimaryColumn()
+  @Column()
   userId: number; // User who addedd a message
 
   @Column()

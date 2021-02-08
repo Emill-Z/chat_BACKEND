@@ -8,7 +8,7 @@ export default function (app: Application): void {
     schema: userSchema,
     rootValue: { ...new Resolvers() },
     context: {
-      test: 'CONTEXT_EMIl'
+      test: 'CONTEXT_EMIl' // just test
     },
     graphiql: true,
   };

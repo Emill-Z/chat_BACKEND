@@ -15,10 +15,10 @@ services:
       - '3000:3000'
 
   postgres:
-    container_name: ChatPostgres
+    container_name: chat_postgres
     image: postgres:10.4
     restart: always
-    env_file: ./env/db.dev
+    env_file: ./env/.dev
     volumes:
       - postgresql_data:/app/postgresql/data
     ports:
@@ -29,7 +29,7 @@ services:
   #   # image: dpage/pgadmin4:4.30
   #   image: dpage/pgadmin4
   #   restart: always
-  #   env_file: ./env/db.dev
+  #   env_file: ./env/.dev
   #   volumes:
   #     - pgadmin-data:/app/pgadmin
   #   depends_on:
@@ -39,4 +39,4 @@ services:
 
 volumes:
   postgresql_data:
-  pgadmin-data:
+  # pgadmin-data:
