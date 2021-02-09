@@ -1,20 +1,30 @@
-import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 interface BaseEntityColumnsI {
   id: number;
-  createdDate: string;
-  updateedDate: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export class BaseEntityColumns implements BaseEntityColumnsI {
+export abstract class BaseEntityColumns implements BaseEntityColumnsI {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
-  createdDate: string;
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updateedDate: string;
+  @UpdateDateColumn({ type: 'timestamp', nullable: true })
+  updatedAt: Date;
+
+  @BeforeInsert()
+  public setCreateDate(): void {
+    this.createdAt = new Date();
+  }
+
+  @BeforeUpdate()
+  public setUpdateDate(): void {
+    this.updatedAt = new Date();
+  }
 
 }

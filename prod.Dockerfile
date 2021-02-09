@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY src /app/src
+COPY migration /app/migration
 
 RUN npm i
 RUN npm run build

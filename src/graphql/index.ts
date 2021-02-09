@@ -7,9 +7,7 @@ export default function (app: Application): void {
   const config: OptionsData = {
     schema: userSchema,
     rootValue: { ...new Resolvers() },
-    context: {
-      test: 'CONTEXT_EMIl' // just test
-    },
+    // context: { },
     graphiql: true,
   };
   app.use('/graphql', graphqlHTTP(config));

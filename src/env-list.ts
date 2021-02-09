@@ -4,4 +4,9 @@ export const {
   POSTGRES_PASSWORD,
   POSTGRES_DB,
   POSTGRES_PORT,
+
+  TYPEORM_LOGGING,
+
+  JWT_SECRET,
+  JWT_EXPIRATION,
 } = process.env;

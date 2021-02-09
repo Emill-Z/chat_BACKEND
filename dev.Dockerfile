@@ -12,4 +12,6 @@ RUN npm i
 
 EXPOSE 8080
 
+# RUN npm run migration:run
+
 CMD [ "npm", "run", "dev" ]

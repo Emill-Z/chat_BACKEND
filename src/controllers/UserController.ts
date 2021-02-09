@@ -1,6 +1,7 @@
 import { ICreateUserInput, IUserInput, UserI } from '../common/interfaces/User';
-import { usersDB } from '../DB/users';
-import { roomsDB } from '../DB/rooms';
+import { getRepository } from 'typeorm';
+import { User } from '../DB/entities/User.entity';
+import { createToken } from '../common/utils/auth';
 
 interface RoomsI {
   id: number|string;
@@ -9,53 +10,85 @@ interface RoomsI {
 
 class UserController {
 
-  public signUp(req: ICreateUserInput): UserI {
-    const { name, email } = req.input;
+  /**
+  * Create new user
+  * @param req contains { name, email, password }
+  */
+  public async signUp(req: ICreateUserInput): Promise<UserI> {
+    const { name, email, password } = req.input;
 
-    const id = Math.floor(Math.random() * Math.floor(10));
+    const userRepository = getRepository(User);
 
-    const newUser = { id, name, email, token: 'HBhjdbcsj4kbdcs53jbcjchcb31jh3veg' };
+    const user: UserI = await userRepository.findOne({ where: [{ email }] });
 
-    usersDB.push(newUser);
-
-    console.log('newUser: ', newUser);
-
-    return usersDB.find((u) => u.id === id);
-  }
-
-  public signIn(newUser: IUserInput): UserI {
-    const fakeDatabase: UserI[] = usersDB;
-    const { id } = newUser.input;
-    return fakeDatabase.find((u) => u.id === id);
-  }
-
-  public getUser(id: number): UserI {
-    const user: UserI = usersDB.find((u) => u.id == id);
-
-    if (!user) {
+    if (user) {
+      // TODO: generate gql erro "User already exist"
       return null;
     }
 
-    // const _rooms = roomsDB.map((r) => ({
-    //   id: r.id,
-    //   name: r.name,
-    //   active: r.online,
-    //   avatar: r.avatar,
-    //   isBot: r.isBot,
-    //   lastMessage: r.lastMessage,
-    // }));
+    const newUser: UserI = await userRepository.create({ name, email, password });
+
+    if (!newUser) {
+      // TODO: generate gql erro 500
+      return null;
+    }
+
+    const savedUser = await userRepository.save(newUser);
+
+    if (!savedUser) { return null; }
+
+    const token = await createToken({ id: newUser.id, email: newUser.email });
+    savedUser.token = token;
+    return savedUser;
+  }
+
+  /**
+  * Login
+  */
+  public signIn(newUser: IUserInput): UserI {
+    return null;
+  }
+
+  /**
+  * Get user by id
+  * @param id user id
+  */
+  public async getUser(id: number): Promise<UserI> {
+    const userRepository = getRepository(User);
+
+    const user: UserI = await userRepository.findOne({ where: [{ id }] });
+
+    if (!user) {
+      // TODO: generate gql erro 404
+      console.log(404);
+      return null;
+    }
 
     user.rooms = [];
 
     return user;
   }
 
-  public getUsers(): UserI[] {
-    return usersDB;
+  /**
+   * Get all users
+   */
+  public async getUsers(): Promise<UserI[]> {
+    const userRepository = getRepository(User);
+
+    const users: UserI[] = await userRepository.find();
+
+    if (!users) {
+      // TODO: generate gql erro 404
+      console.log(404);
+      return null;
+    }
+
+    return users;
   }
 
   public getRooms(): RoomsI[] {
-    return [...usersDB, ...roomsDB];
+    // return [...usersDB, ...roomsDB];
+    return [];
   }
 
 }

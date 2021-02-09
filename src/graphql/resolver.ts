@@ -20,12 +20,12 @@ interface UserResolverI<T> {
 
 export class Resolvers {
 
-  me: UserResolverI<UserI> = ({ id }, context) => {
+  me = async ({ id }: MeArgsI, context: ContextI): Promise<UserI> => {
     console.log(context.test);
-    return userCtrl.getUser(id);
+    return await userCtrl.getUser(id);
   };
 
-  users: UserResolverI<UserI[]> = () => {
+  users = async (): Promise<UserI[]> => {
     return userCtrl.getUsers();
   }
 

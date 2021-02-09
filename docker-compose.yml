@@ -18,25 +18,24 @@ services:
     container_name: chat_postgres
     image: postgres:10.4
     restart: always
-    env_file: ./env/.dev
+    env_file: ./env/.${NODE_ENV}
     volumes:
       - postgresql_data:/app/postgresql/data
     ports:
       - '5432:5432'
 
-  # pgadmin:
-  #   container_name: pgadmin
-  #   # image: dpage/pgadmin4:4.30
-  #   image: dpage/pgadmin4
-  #   restart: always
-  #   env_file: ./env/.dev
-  #   volumes:
-  #     - pgadmin-data:/app/pgadmin
-  #   depends_on:
-  #     - postgres
-  #   ports:
-  #     - "8080:80"
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:4.30
+    restart: always
+    env_file: ./env/.${NODE_ENV}
+    volumes:
+      - pgadmin-data:/app/pgadmin
+    depends_on:
+      - postgres
+    ports:
+      - "8080:80"
 
 volumes:
   postgresql_data:
-  # pgadmin-data:
+  pgadmin-data:

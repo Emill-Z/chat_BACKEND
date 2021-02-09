@@ -5,6 +5,7 @@ export interface UserI {
   rooms?: unknown[];
   subscriptions?: number[];
   avatar?: string;
+  token?: string;
 }
 
 export interface ICreateUser extends Omit<UserI, 'id'> {
