@@ -20,6 +20,7 @@ export const userType = new GraphQLObjectType({
     email: { type: GraphQLString },
     password: { type: GraphQLString },
     rooms: { type: new GraphQLList(RoomType) },
+    token: { type: GraphQLString },
   }
 });
 

@@ -2,6 +2,8 @@ import { Entity, Column, PrimaryColumn, BeforeInsert } from 'typeorm';
 import { BaseEntityColumns } from './BaseEntityColumns';
 import { hash } from 'bcrypt';
 
+const SALT_ROUNDS = 10;
+
 @Entity()
 export class User extends BaseEntityColumns {
 
@@ -16,7 +18,7 @@ export class User extends BaseEntityColumns {
 
   @BeforeInsert()
   public async hashPassword(): Promise<void> {
-    this.password = await hash(this.password, 10);
+    this.password = await hash(this.password, SALT_ROUNDS);
   }
 
 }

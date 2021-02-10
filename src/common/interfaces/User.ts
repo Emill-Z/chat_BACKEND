@@ -6,6 +6,7 @@ export interface UserI {
   subscriptions?: number[];
   avatar?: string;
   token?: string;
+  password?: string;
 }
 
 export interface ICreateUser extends Omit<UserI, 'id'> {

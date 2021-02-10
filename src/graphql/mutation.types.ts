@@ -10,6 +10,7 @@ const inputUserType = new GraphQLInputObjectType({
     name: { type: GraphQLString },
     email: { type: GraphQLString },
     password: { type: GraphQLString },
+    token: { type: GraphQLString },
   }
 });
 

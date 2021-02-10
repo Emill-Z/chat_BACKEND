@@ -1,7 +1,7 @@
 import { ICreateUserInput, IUserInput, UserI } from '../common/interfaces/User';
 import { getRepository } from 'typeorm';
 import { User } from '../DB/entities/User.entity';
-import { createToken } from '../common/utils/auth';
+import { createToken, verifyPassword } from '../common/utils/auth';
 
 interface RoomsI {
   id: number|string;
@@ -45,8 +45,25 @@ class UserController {
   /**
   * Login
   */
-  public signIn(newUser: IUserInput): UserI {
-    return null;
+  public async signIn(req: IUserInput): Promise<UserI> {
+    const { email, password } = req.input;
+
+    const userRepository = getRepository(User);
+
+    const user: UserI = await userRepository.findOne({ where: [{ email }] });
+
+    // TODO: generate gql erro 404
+    if (!user) { return null; }
+
+    const isVerified = await verifyPassword(password, user.password);
+
+    // TODO: generate gql erro 404
+    if (!isVerified) { return null; }
+
+    const token = await createToken({ id: user.id, email: user.email });
+    user.token = token;
+
+    return user;
   }
 
   /**
